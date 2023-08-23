@@ -6,47 +6,62 @@ import SingleCard from './components/SingleCard';
 function App() {
 const [cards, setCards] = useState([])
 const [turns, setTurns] = useState(0)
-const [choiceOne, SetChoiceOne] = useState(null)
-const [choiceTwo, SetChoiceTwo] = useState(null)
+const [choiceOne, setChoiceOne] = useState(null)
+const [choiceTwo, setChoiceTwo] = useState(null)
 
 useEffect(()=>{
-
-
-  console.log('useEffect!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+  console.log('cards', cards)
   console.log('choiceOne', choiceOne)
   console.log('choiceTwo', choiceTwo)
-  if(choiceOne != null && choiceTwo != null){
+  if(choiceOne && choiceTwo){
   if (choiceTwo.src == choiceOne.src){
-    console.log("du fick par")
+    setCards(prevCards => {
+      return prevCards.map(card => {
+        if (card.src === choiceOne.src){
+          return {...card, matched: true}
+        }
+        else{
+          return card
+        }
+      })
+    })
+    resetTurn()
   }
   else{
-    console.log("tyvärr inget par")
+    setTimeout(() => resetTurn(), 1000)
   }
 }
 
 }, [choiceTwo, choiceOne])
 
+const resetTurn = () => {
+  setChoiceOne(null)
+  setChoiceTwo(null)
+  setTurns(prevTurns => prevTurns+1)
+}
+
+
 const cardImages = [
-  { "src" : "/img/cat.png" },
-  { "src" : "/img/deer.png" },
-  { "src" : "/img/frog.png" },
-  { "src" : "/img/kiwi.png" },
-  { "src" : "/img/monstera.png" },
-  { "src" : "/img/rubber.png" },
-  { "src" : "/img/seagull.png" },
-  { "src" : "/img/squirrel.png" },
+  { "src" : "/img/cat.png", matched: false},
+  { "src" : "/img/deer.png", matched: false},
+  { "src" : "/img/frog.png", matched: false},
+  { "src" : "/img/kiwi.png", matched: false},
+  { "src" : "/img/monstera.png", matched: false},
+  { "src" : "/img/rubber.png", matched: false},
+  { "src" : "/img/seagull.png", matched: false},
+  { "src" : "/img/squirrel.png", matched: false},
 ]
 
 const shuffleCards = () => {
   const shuffledCards = [...cardImages, ...cardImages].sort(() => Math.random() - 0.5).map((card) => ({ ...card, id: Math.random()}));
   setCards(shuffledCards);
   setTurns(0);
-  SetChoiceOne(null)
-  SetChoiceTwo(null)
+  setChoiceOne(null)
+  setChoiceTwo(null)
 }
 
 const handleChoice = (card) => {
-  choiceOne ? SetChoiceTwo(card) : SetChoiceOne(card);
+  choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
 }
 
 // console.log(cards, turns, choiceOne);
@@ -57,7 +72,12 @@ const handleChoice = (card) => {
       <button onClick={shuffleCards}>New Game</button>
       <div className='card-grid'>
         {cards.map(card => (
-          <SingleCard key={card.id} card={card} handleChoice={handleChoice}/>
+          <SingleCard 
+            key={card.id} 
+            card={card} 
+            handleChoice={handleChoice}
+            flipped={card === choiceOne || card === choiceTwo || card.matched}
+          />
         ))}
       </div>
 

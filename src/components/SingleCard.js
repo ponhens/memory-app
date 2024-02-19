@@ -1,12 +1,14 @@
 import './SingleCard.css'
 
 
-function SingleCard({card, handleChoice, flipped}) {
+function SingleCard({card, setPickedCardToChoiceOneOrTwo, flipped, cardsClickable}) {
 /////////////////////////////////////////////////////
 
 
 const handleClick = () => {
-   handleChoice(card)
+  if (cardsClickable){
+    setPickedCardToChoiceOneOrTwo(card)
+  }
 }
 
   return (

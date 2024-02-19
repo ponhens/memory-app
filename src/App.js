@@ -9,12 +9,11 @@ function App() {
   const [turns, setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
+  const [cardsClickable, setCardsClickable] = useState(true)
 
   useEffect(() => {
-                                                                                                  // console.log('cards', cards)
-                                                                                                  // console.log('choiceOne', choiceOne)
-                                                                                                 // console.log('choiceTwo', choiceTwo)
     if (choiceOne && choiceTwo) {
+       makeCardsUnclickableforAsec()
       if (choiceTwo.src == choiceOne.src) {
         setCards(prevCards => {
           return prevCards.map(card => {
@@ -33,14 +32,18 @@ function App() {
       }
     }
 
-  }, [choiceTwo, choiceOne])
+  }, [choiceTwo])
+
+  const makeCardsUnclickableforAsec = () => {
+    setCardsClickable(false)
+    setTimeout(() => setCardsClickable(true), 1000)
+  }
 
   const resetTurn = () => {
     setChoiceOne(null)
     setChoiceTwo(null)
     setTurns(prevTurns => prevTurns + 1)
   }
-
 
   const cardImages = [
     {
@@ -70,30 +73,30 @@ function App() {
   ]
 
   const shuffleAndPlaceCards = () => {
-    const shuffledCards = [...cardImages, ...cardImages].sort(() => Math.random() - 0.5).map((card) => ({ ...card, id: Math.random() }));
-    setCards(shuffledCards);
+    const shuffledCards = [...cardImages, ...cardImages].sort(() => Math.random() - 0.5);
+    const shuffledCardsWithIds = shuffledCards.map((card) => ({ ...card, id: Math.random() }));
+    setCards(shuffledCardsWithIds);
     setTurns(0);
     setChoiceOne(null)
     setChoiceTwo(null)
   }
 
-  const handleChoice = (card) => {
+  const setPickedCardToChoiceOneOrTwo = (card) => {
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
   }
-
-  // console.log(cards, turns, choiceOne);
 
   return (
     <div className="App">
       <h1>Memory</h1>
       <button onClick={shuffleAndPlaceCards}>New Game</button>
       <div className='card-grid'>
-        {cards.map(c => (
+        {cards.map(card => (
           <SingleCard
-            key={c.id}
-            card={c}
-            handleChoice={handleChoice}
-            flipped={c === choiceOne || c === choiceTwo || c.matched}
+            key={card.id}
+            card={card}
+            setPickedCardToChoiceOneOrTwo={setPickedCardToChoiceOneOrTwo}
+            flipped={card === choiceOne || card === choiceTwo || card.matched}
+            cardsClickable={cardsClickable}
           />
         ))}
       </div>

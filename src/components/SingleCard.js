@@ -2,6 +2,7 @@ import './SingleCard.css'
 
 
 function SingleCard({card, handleChoice, flipped}) {
+/////////////////////////////////////////////////////
 
 
 const handleClick = () => {
@@ -16,6 +17,16 @@ const handleClick = () => {
             </div>
           </div>
   );
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////
 }
 
 export default SingleCard;

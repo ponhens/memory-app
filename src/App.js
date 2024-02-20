@@ -12,9 +12,8 @@ function App() {
   const [cardsClickable, setCardsClickable] = useState(true)
 
   useEffect(() => {
-    if (choiceOne && choiceTwo) {
-       makeCardsUnclickableforAsec()
-      if (choiceTwo.src == choiceOne.src) {
+    if (choiceOne && choiceTwo && choiceTwo.id != choiceOne.id) {
+      if (choiceTwo.src == choiceOne.src && choiceTwo.id != choiceOne.id) {
         setCards(prevCards => {
           return prevCards.map(card => {
             if (card.src === choiceOne.src) {
@@ -28,6 +27,7 @@ function App() {
         resetTurn()
       }
       else {
+        makeCardsUnclickableforAsec()
         setTimeout(() => resetTurn(), 1000)
       }
     }
@@ -36,7 +36,7 @@ function App() {
 
   const makeCardsUnclickableforAsec = () => {
     setCardsClickable(false)
-    setTimeout(() => setCardsClickable(true), 1000)
+    setTimeout(() => setCardsClickable(true), 1200)
   }
 
   const resetTurn = () => {

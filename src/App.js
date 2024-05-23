@@ -11,7 +11,11 @@ function App() {
   const [choiceTwo, setChoiceTwo] = useState(null)
   const [cardsClickable, setCardsClickable] = useState(true)
 
+
+
   useEffect(() => {
+    setTurns(turns);
+    console.log("turns", turns)
     if (choiceOne && choiceTwo && choiceTwo.id != choiceOne.id) {
       if (choiceTwo.src == choiceOne.src && choiceTwo.id != choiceOne.id) {
         setCards(prevCards => {
@@ -26,24 +30,30 @@ function App() {
         })
         resetTurn()
       }
+      
       else {
         makeCardsUnclickableforAsec()
         setTimeout(() => resetTurn(), 1000)
       }
     }
-
   }, [choiceTwo])
+
+
 
   const makeCardsUnclickableforAsec = () => {
     setCardsClickable(false)
     setTimeout(() => setCardsClickable(true), 1200)
   }
 
+
+
   const resetTurn = () => {
     setChoiceOne(null)
     setChoiceTwo(null)
     setTurns(prevTurns => prevTurns + 1)
   }
+
+
 
   const cardImages = [
     {
@@ -72,6 +82,8 @@ function App() {
     },
   ]
 
+
+
   const shuffleAndPlaceCards = () => {
     const shuffledCards = [...cardImages, ...cardImages].sort(() => Math.random() - 0.5);
     const shuffledCardsWithIds = shuffledCards.map((card) => ({ ...card, id: Math.random() }));
@@ -81,14 +93,19 @@ function App() {
     setChoiceTwo(null)
   }
 
+
+
   const setPickedCardToChoiceOneOrTwo = (card) => {
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
   }
+
+
 
   return (
     <div className="App">
       <h1>Memory</h1>
       <button onClick={shuffleAndPlaceCards}>New Game</button>
+      <h2>Turns: {turns}</h2>
       <div className='card-grid'>
         {cards.map(card => (
           <SingleCard

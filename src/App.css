@@ -35,3 +35,14 @@ button:hover{
     width: 100%;
     object-fit: contain;
 }
+
+
+.congratulationsTextActive{
+    font-size: 50;
+    visibility: visible;
+}
+
+.congratulationsTextInactive{
+    font-size: 50;
+    visibility: hidden;
+}

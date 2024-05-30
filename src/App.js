@@ -10,6 +10,9 @@ function App() {
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
   const [cardsClickable, setCardsClickable] = useState(true)
+  const [memoryIsDone, setMemoryIsDone] = useState(false)
+  const [nrOfCardsWithMatchEqualTrue, SetNrOfCardsWithMatchEqualTrue] = useState(0)
+  
 
 
 
@@ -38,6 +41,10 @@ function App() {
     }
   }, [choiceTwo])
 
+  useEffect(() => {
+    checkToSeeIfMemoryIsDone()
+  }, [cards])
+
 
 
   const makeCardsUnclickableforAsec = () => {
@@ -46,8 +53,26 @@ function App() {
   }
 
 
+  const checkToSeeIfMemoryIsDone = () => {
+    let counter = 0;
+      cards.map(c => {
+        if(c.matched == true){
+          counter = counter+1;
+        }
+      })
+      console.log(cards)
+console.log(counter, " counter")
+console.log("memoryIsDone == ", memoryIsDone)
+      if(counter == cards.length){
+        console.log("memory done")
+        setMemoryIsDone(true)
+        console.log("memoryIsDone = ", memoryIsDone)
+      }
+  }
+
 
   const resetTurn = () => {
+    console.log( "resetTurn")
     setChoiceOne(null)
     setChoiceTwo(null)
     setTurns(prevTurns => prevTurns + 1)
@@ -91,6 +116,7 @@ function App() {
     setTurns(0);
     setChoiceOne(null)
     setChoiceTwo(null)
+    setMemoryIsDone(false)
   }
 
 
@@ -106,6 +132,7 @@ function App() {
       <h1>Memory</h1>
       <button onClick={shuffleAndPlaceCards}>New Game</button>
       <h2>Turns: {turns}</h2>
+      <p className={memoryIsDone ? 'congratulationsTextActive' : 'congratulationsTextInactive'}>Congratulations</p>
       <div className='card-grid'>
         {cards.map(card => (
           <SingleCard
